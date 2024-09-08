@@ -8,51 +8,47 @@ import { toast } from 'react-toastify'
 import TicketItem from '../components/TicketItem'
 import BackButton from '../components/BackButton'
 
-
 function Tickets() {
-     
-    const {tickets,isLoading,isSuccess,isError,message} = useSelector((state)=>state.ticket)
-
-    const navigate=useNavigate()
-    const dispatch=useDispatch()
-
-    useEffect(()=>{
-        return ()=>{
-            if(isSuccess){
-                dispatch(reset())
-            }
+    const { tickets, isLoading, isSuccess, isError, message } = useSelector((state) => state.ticket);
+  
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+  
+    useEffect(() => {
+      return () => {
+        if (isSuccess) {
+          dispatch(reset());
         }
-    },[isSuccess,dispatch,reset])
-
-    useEffect(()=>{
-        dispatch(getTickets())
-    },[dispatch])
-
-
-    
-
-    if(isLoading){
-        return <Spinner/>
+      };
+    }, [isSuccess, dispatch]);
+  
+    useEffect(() => {
+      dispatch(getTickets());
+    }, [dispatch]);
+  
+    const ticketList = Array.isArray(tickets) ? tickets : [];
+  
+    if (isLoading) {
+      return <Spinner />;
     }
-
-  return (
-    <>
-    <BackButton url='/'/>
-    <h1>Tickets</h1>
-    <div className='tickets'>
-        <div className="ticket-headings">
+  
+    return (
+      <>
+        <BackButton url="/" />
+        <h1>Tickets</h1>
+        <div className="tickets">
+          <div className="ticket-headings">
             <div>Date</div>
             <div>Product</div>
             <div>Status</div>
             <div></div>
+          </div>
+          {ticketList.map((ticket) => (
+            <TicketItem key={ticket._id} ticket={ticket} />
+          ))}
         </div>
-        {tickets.map((ticket)=>(
-            <TicketItem key={ticket._id} ticket={ticket}/>
-        ))}
-
-    </div>
-    </>
-  )
-}
-
-export default Tickets
+      </>
+    );
+  }
+  
+  export default Tickets;
